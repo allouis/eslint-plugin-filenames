@@ -3,6 +3,7 @@ var regexRule = require("../../lib/rules/match-regex"),
 
 var exportingCode = 'module.exports = foo',
     exportedFunctionCall = 'module.exports = foo()',
+    exportedClassCode = "module.exports = class Foo {};",
     testCode = "var foo = 'bar';",
     ruleTester = new RuleTester();
 
@@ -56,6 +57,12 @@ ruleTester.run("lib/rules/match-regex", regexRule, {
             code: exportedFunctionCall,
             filename: "foo_bar.js",
             options: [ "^[a-z_]+$", true ]
+        },
+        {
+            code: exportedClassCode,
+            filename: 'Foo.js',
+            options: [ "^[a-z_]+$", false, true ],
+            parserOptions: { ecmaVersion: 6 }
         }
     ],
 
