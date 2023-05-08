@@ -5,6 +5,8 @@ var exportedJsxClassCode = "module.exports = class Foo { render() { return <span
     exportedClassCode = "module.exports = class Foo {};",
     exportedJsxFunctionCode = "module.exports = function foo() { return <span>Test Fn</span> };",
     exportedEs6ClassCode = "export default class Foo {};",
+    exportedEs6ClassNotDefaultCode = "export class Foo {};",
+    exportedNotDefaultCode = "export const Foo = 5",
     exportedEs6ClassExpression = "export default Foo = class {};",
     exportedEs6JsxClassCode = "export default class Foo { render() { return <span>Test Class</span>; } };",
     exportedEs6Variable = "export default Foo = 'blah'", 
@@ -51,6 +53,16 @@ ruleTester.run("lib/rules/match-exported-class", exportedRule, {
             parserOptions: { ecmaVersion: 6, ecmaFeatures: { jsx: true } }
         },
         {
+            code: exportedEs6ClassNotDefaultCode,
+            filename: "/some/dir/Foo.js",
+            parserOptions: { ecmaVersion: 6, sourceType: 'module' }
+        },
+        {
+            code: exportedNotDefaultCode,
+            filename: "/some/dir/foo.js",
+            parserOptions: { ecmaVersion: 6, sourceType: 'module' }
+        },
+        {
             code: exportedJsxFunctionCode,
             filename: "/some/dir/foo.js",
             parserOptions: { ecmaFeatures: { jsx: true } }
@@ -79,6 +91,14 @@ ruleTester.run("lib/rules/match-exported-class", exportedRule, {
             parserOptions: { ecmaVersion: 6 },
             errors: [{
                 message: "Filename 'foo-class.js' does not match exported class 'Foo'."
+            }]
+        },
+        {
+            code: exportedEs6ClassNotDefaultCode,
+            filename: "/some/dir/foo.js",
+            parserOptions: { ecmaVersion: 6, sourceType: 'module' },
+            errors: [{
+                message: "Filename 'foo.js' does not match exported class 'Foo'."
             }]
         },
         {
